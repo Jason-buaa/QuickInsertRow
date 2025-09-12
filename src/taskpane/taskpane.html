@@ -1,0 +1,79 @@
+<!-- Copyright (c) Microsoft Corporation.
+Licensed under the MIT License. -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contoso Task Pane Add-in</title>
+
+  <!-- Office JavaScript API -->
+  <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+
+  <!-- Fluent UI Core -->
+  <link rel="stylesheet"
+    href="https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css" />
+
+  <!-- Template styles -->
+  <link href="taskpane.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="ms-font-m ms-welcome ms-Fabric">
+  <header class="ms-welcome__header ms-bgColor-neutralLighter">
+    <img width="90" height="90" src="../../assets/logo-filled.png" alt="Contoso" title="Contoso" />
+    <h1 class="ms-font-su">Welcome</h1>
+  </header>
+
+  <!-- Sideload message -->
+  <section id="sideload-msg" class="ms-welcome__main">
+    <h2 class="ms-font-xl">
+      Please
+      <a target="_blank"
+        href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing">
+        sideload</a>
+      your add-in to see app body.
+    </h2>
+  </section>
+
+  <main id="app-body" class="ms-welcome__main" style="display: none;">
+    <h2 class="ms-font-xl">Insert Empty Cells</h2>
+  
+    <div class="ms-TextField">
+      <label class="ms-Label">Number of cells/rows to insert:</label>
+      <input id="rowCount" class="ms-TextField-field" type="number" min="1" value="1" />
+    </div>
+  
+    <!-- Toggle 开关 -->
+    <div class="ms-Toggle" style="margin:12px 0;">
+      <span class="ms-Toggle-description">Insert Mode</span>
+      <input type="checkbox" id="toggleMode" class="ms-Toggle-input" />
+      <label for="toggleMode" class="ms-Toggle-field">
+        <span class="ms-Label">Entire Row</span>
+        <span class="ms-Toggle-background">
+          <span class="ms-Toggle-thumb"></span>
+        </span>
+      </label>
+    </div>
+  
+    <!-- 插入按钮 -->
+    <div role="button" id="insertBtn" class="ms-welcome__action ms-Button ms-Button--hero ms-font-l">
+      <span class="ms-Button-label">Insert</span>
+    </div>
+  
+    <p class="ms-font-s" style="margin-top:12px;color:#666;">
+      Select a cell, enter number, then click "Insert".<br/>
+      Toggle OFF = insert only in current column.<br/>
+      Toggle ON = insert entire row(s).
+    </p>
+  
+    <p><label id="status"></label></p>
+  </main>
+  
+
+  <script src="taskpane.js"></script>
+</body>
+
+</html>
