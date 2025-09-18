@@ -25,32 +25,36 @@ async function insertCells(entireRow) {
 
   try {
     await Excel.run(async (context) => {
-      const active = context.workbook.getActiveCell();
-      active.load("rowIndex, columnIndex, worksheet");
+      const selection = context.workbook.getSelectedRange();
+      selection.load("rowIndex, columnIndex, rowCount, columnCount, worksheet");
       await context.sync();
 
-      const sheet = active.worksheet;
+      const sheet = selection.worksheet;
 
       if (entireRow) {
-        // 插入整行：从当前行开始往下推
-        const startRow = active.rowIndex;
-        const endRow = startRow + n - 1;
+        // 插入整行：从每一行开始往下推
+        const startRow = selection.rowIndex;
+        const endRow = startRow + selection.rowCount - 1;
         const address = `${startRow + 1}:${endRow + 1}`; // Excel 行号从 1 开始
         const insertRange = sheet.getRange(address);
         insertRange.insert(Excel.InsertShiftDirection.down);
       } else {
-        // 插入当前列的单元格：从当前单元格往下推
-        const col = active.columnIndex;
-        const startRow = active.rowIndex;
-        const insertRange = sheet.getRangeByIndexes(startRow, col, n, 1);
-        insertRange.insert(Excel.InsertShiftDirection.down);
+        // 插入当前列的单元格：从每一列开始往下推
+        const startRow = selection.rowIndex;
+        const startCol = selection.columnIndex;
+        const colCount = selection.columnCount;
+
+        for (let col = 0; col < colCount; col++) {
+          const insertRange = sheet.getRangeByIndexes(startRow, startCol + col, n, 1);
+          insertRange.insert(Excel.InsertShiftDirection.down);
+        }
       }
 
       await context.sync();
     });
 
     showStatus(
-      `✅ Inserted ${n} empty ${entireRow ? "row(s)" : "cell(s) in current column"} above selection.`
+      `✅ Inserted ${n} empty ${entireRow ? "row(s)" : "cell(s) in selected columns"} above selection.`
     );
   } catch (error) {
     showStatus("❌ " + (error.message || error));
